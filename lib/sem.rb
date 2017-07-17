@@ -1,5 +1,7 @@
 require "sem/version"
+require "thor"
 
 module Sem
-  # Your code goes here...
+  require_relative "sem/interface"
+  require_relative "sem/commands"
 end
