@@ -9,14 +9,14 @@ module Sem
   require_relative "sem/commands"
 
   def run(params)
-    command = params.shift
+    command     = params.shift
+    module_name = "::Sem::Commands::#{command.split(":").map(&:capitalize).join("::")}"
+    handler     = const_get(module_name)
 
-    # TODO: automate me with magic <3
-    case command
-    when "help"       then Sem::Commands::Help.run(params)
-    when "login"      then Sem::Commands::Login.run(params)
-    when "teams"      then Sem::Commands::Teams.run(params)
-    when "teams:info" then Sem::Commands::Teams::Info.run(params)
+    if handler
+      handler.run(params)
+    else
+      puts "show help"
     end
   end
 

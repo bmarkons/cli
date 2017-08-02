@@ -9,9 +9,9 @@ describe Sem::Commands::Help do
         "",
         "Help topics, type \e[32msem help TOPIC\e[0m for more details:",
         "",
-        "  teams     manage teams and team membership",
-        "  projects  manage projects",
-        "  orgs      manage organizations",
+        "  teams  Manage teams and team membership",
+        "  login  Log in to semaphore",
+        "  help   Get help with the cli usage",
         "",
         ""
       ]

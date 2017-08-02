@@ -9,11 +9,11 @@ module Sem
         Sem::UI.info "Help topics, type #{Sem::UI.strong "sem help TOPIC"} for more details:"
         Sem::UI.info ""
 
-        Sem::UI.table [
-          ["  teams", "manage teams and team membership"],
-          ["  projects", "manage projects"],
-          ["  orgs", "manage organizations"]
-        ]
+        topics = Sem::Commands::STRUCTURE.map do |topic, value|
+          ["  #{topic}", value[:description]]
+        end
+
+        Sem::UI.table(topics)
 
         Sem::UI.info ""
       end
