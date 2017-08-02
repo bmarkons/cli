@@ -9,15 +9,10 @@ module Sem
   require_relative "sem/commands"
 
   def run(params)
-    command     = params.shift
-    module_name = "::Sem::Commands::#{command.split(":").map(&:capitalize).join("::")}"
-    handler     = const_get(module_name)
+    command = params[0]
+    params  = params[1..-1]
 
-    if handler
-      handler.run(params)
-    else
-      puts "show help"
-    end
+    Sem::Commands.run(command, params)
   end
 
 end

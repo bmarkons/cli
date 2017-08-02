@@ -1,33 +1,27 @@
 module Sem
-  module Commands
+  class Commands
 
     # load all commands
-    Dir["#{File.dirname(__FILE__)}/commands/**/*.rb"].each { |f| require(f) }
+    require_relative "commands/base"
+    Dir["#{File.dirname(__FILE__)}/commands/**/*.rb"].sort.each { |f| require(f) }
 
-    # TODO: this could be generated with magic
+    def self.all
+      ObjectSpace.each_object(Class).select { |klass| klass < Sem::Commands::Base }
+    end
 
-    STRUCTURE = {
-      :teams => {
-        :description => "Manage teams and team membership",
-        :handler => Sem::Commands::Teams,
+    def self.top_level
+      all.select { |command| command.cli_name !~ /.*\:.*/ }
+    end
 
-        :actions => {
-          :info => {
-            :description => "Show info about a team",
-            :handler => Sem::Commands::Teams::Info,
-          }
-        }
-      },
+    def self.run(command, params)
+      handler = all.find { |handler| handler.cli_name == command }
 
-      :login => {
-        :description => "Log in to semaphore",
-        :handler => Sem::Commands::Login,
-      },
+      if handler
+        handler.run(params)
+      else
+        puts "Show help"
+      end
+    end
 
-      :help => {
-        :description => "Get help with the cli usage",
-        :handler => Sem::Commands::Help
-      }
-    }
   end
 end
