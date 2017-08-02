@@ -1,12 +1,8 @@
 module Sem
   module Commands
 
-    # TODO: automate me with magic <3
-
-    require_relative "commands/help"
-    require_relative "commands/login"
-    require_relative "commands/teams"
-    require_relative "commands/teams/info"
+    # load all commands
+    Dir["#{File.dirname(__FILE__)}/commands/**/*.rb"].each { |f| require(f) }
 
   end
 end
