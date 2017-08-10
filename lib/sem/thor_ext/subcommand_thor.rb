@@ -19,8 +19,10 @@ module Sem
       end
 
       def self.help(shell, subcommand = false)
-        shell.say "Usage: sem COMMAND"
-        shell.say "Help topics, type sem help TOPIC for more details: \n\n"
+        shell.say "Usage: sem #{namespace}:<command>"
+        shell.say
+        shell.say "Commands: (type #{shell.set_color "sem help #{namespace}:<command>", :cyan} to get help)"
+        shell.say
 
         list = printable_commands(true, subcommand)
 
