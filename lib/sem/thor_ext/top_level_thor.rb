@@ -49,13 +49,24 @@ module Sem
       def self.help(shell, subcommand = false)
         shell.say "Usage: sem COMMAND"
         shell.say
-        shell.say "Help topics, type sem help TOPIC for more details:"
+        shell.say "Help topics, type #{shell.set_color "sem help TOPIC", :cyan} for more details:"
         shell.say
 
         list = printable_commands(true, subcommand).reject { |cmd| cmd[0] =~ /help/ }
 
         shell.print_table(list, :indent => 2, :truncate => true)
         shell.say
+      end
+
+      def self.printable_commands(all = true, _subcommand = false)
+        (all ? all_commands : commands).map do |_, command|
+          next if command.hidden?
+          next if command.name == "help"
+          item = []
+          item << banner(command, true, false)
+          item << (command.description ? "    #{command.description.gsub(/\s+/m, " ")}" : "")
+          item
+        end.compact
       end
 
     end
