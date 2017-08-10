@@ -26,17 +26,24 @@ module Sem
       #   and then sent to the super class.
       #
       def self.start(args = nil)
-        args ||= ARGV
+        super(process_args(args || ARGV))
+      end
 
-        args = if args.empty?
-                 args
-               elsif args[0] == "help"
-                 [args.shift] + args.shift.split(":") + args
-               else
-                 args.shift.split(":") + args
-               end
+      #
+      # Converts: ["teams:projects:info", "rt/devs"]
+      #     into: ["teams", "projects", "info", "rt/devs"]
+      #
+      # Converts: ["help", "teams:projects:info", "rt/devs"]
+      #     into: ["help", "teams", "projects", "info", "rt/devs"]
+      #
+      private_class_method def self.process_args(args)
+        return [] if args.empty?
 
-        super(args)
+        if args[0] == "help"
+          [args[0]] + process_args(args[1..-1])
+        else
+          args.shift.split(":") + args
+        end
       end
 
       #
