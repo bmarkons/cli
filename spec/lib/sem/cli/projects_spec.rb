@@ -88,6 +88,35 @@ describe Sem::CLI::Projects do
     end
   end
 
+  describe "#create" do
+    before { allow(Sem::API::Projects).to receive(:create).and_return(project) }
+
+    it "calls the API" do
+      expect(Sem::API::Projects).to receive(:create).with("renderedtext",
+                                                          :name => "cli",
+                                                          :repo_provider => "github",
+                                                          :repo_owner => "renderedtext",
+                                                          :repo_name => "api")
+
+      sem_run("projects:create renderedtext/cli --url git@github.com:renderedtext/cli.git")
+    end
+
+    it "creates a project and displays it" do
+      stdout, stderr, status = sem_run("projects:create renderedtext/api-2 --url git@github.com:renderedtext/cli.git")
+
+      msg = [
+        "ID       3bc7ed43-ac8a-487e-b488-c38bc757a034",
+        "Name     renderedtext/cli",
+        "Created  2017-08-01 13:14:40 +0200",
+        "Updated  2017-08-02 13:14:40 +0200"
+      ]
+
+      expect(stderr).to eq("")
+      expect(stdout.strip).to eq(msg.join("\n"))
+      expect(status).to eq(:ok)
+    end
+  end
+
   describe Sem::CLI::Projects::SharedConfigs do
     describe "#list" do
       let(:config_0) do

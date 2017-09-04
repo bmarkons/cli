@@ -16,6 +16,22 @@ class Sem::CLI::Projects < Dracula
     Sem::Views::Projects.info(project_instance)
   end
 
+  desc "create", "create a project"
+  option :url, :aliases => "-u", :desc => "Git url to the repository"
+  def create(project)
+    org_name, project_name = Sem::SRN.parse_project(project)
+    repo_provider, repo_owner, repo_name = Sem::Helpers::Git.parse_url(params[:url])
+
+    project = Sem::API::Projects.create(org_name,
+                                        :name => team_name,
+                                        :repo_provider => repo_provider,
+                                        :repo_owner => repo_owner,
+                                        :repo_name => repo_name)
+
+    Sem::Views::Projects.create(project)
+  end
+
+
   class SharedConfigs < Dracula
     desc "list", "list shared configurations on a project"
     def list(project)
