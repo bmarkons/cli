@@ -28,6 +28,8 @@ class Sem::Views::Projects < Sem::Views::Base
       ]
     end
 
+    alias create info
+
     private
 
     def name(project)

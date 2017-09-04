@@ -96,7 +96,7 @@ describe Sem::CLI::Projects do
                                                           :name => "cli",
                                                           :repo_provider => "github",
                                                           :repo_owner => "renderedtext",
-                                                          :repo_name => "api")
+                                                          :repo_name => "cli")
 
       sem_run("projects:create renderedtext/cli --url git@github.com:renderedtext/cli.git")
     end
