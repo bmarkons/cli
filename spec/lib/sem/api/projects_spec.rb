@@ -103,6 +103,41 @@ describe Sem::API::Projects do
     end
   end
 
+  describe ".create" do
+    let(:args) { { :name => instance_name, :repo_provider => "github", :repo_owner => "renderedtext", :repo_name => "cli" } }
+
+    before { allow(class_api).to receive(:create_for_org).and_return(instance) }
+
+    it "calls create_for_org on the class_api" do
+      expect(class_api).to receive(:create_for_org).with(org_name, args)
+
+      described_class.create(org_name, args)
+    end
+
+    it "converts the instance to instacen hash" do
+      expect(described_class).to receive(:to_hash).with(instance, org_name)
+
+      described_class.create(org_name, args)
+    end
+
+    it "returns the instance hash" do
+      return_value = described_class.create(org_name, args)
+
+      expect(return_value).to eql(instance_hash)
+    end
+
+    context "resource creation failed" do
+      before { allow(class_api).to receive(:create_for_org).and_return(nil) }
+
+      it "raises an exception" do
+        expected_message = "[ERROR] Project creation failed\n\nProject #{org_name}/#{instance_name} not created."
+
+        expect { described_class.create(org_name, args) }.to raise_exception(Sem::Errors::ResourceNotCreated,
+                                                                             expected_message)
+      end
+    end
+  end
+
   describe ".api" do
     it "returns the API from the client" do
       return_value = described_class.api

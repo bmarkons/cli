@@ -23,6 +23,14 @@ module Sem
           to_hash(project, org_name)
         end
 
+        def create(org_name, args)
+          project = api.create_for_org(org_name, args)
+
+          raise Sem::Errors::ResourceNotCreated.new("Project", [org_name, args[:name]]) if project.nil?
+
+          to_hash(project, org_name)
+        end
+
         def api
           client.projects
         end
