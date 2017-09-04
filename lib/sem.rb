@@ -5,6 +5,7 @@ require "fileutils"
 require "pmap"
 
 module Sem
+  require "sem/helpers"
   require "sem/errors"
   require "sem/configuration"
   require "sem/srn"
